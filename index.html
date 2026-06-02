@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AbbyMath — Ontario Grade 5 Mathematics</title>
-  <meta name="description" content="AbbyMath: a Grade 5 math site aligned to the Ontario 2020 Mathematics curriculum. Browse the curriculum by strand and practise with sample assignments." />
+  <title>AbbyMath — Ontario Grade 5 Curriculum</title>
+  <meta name="description" content="AbbyMath: the Ontario 2020 Grade 5 Mathematics curriculum, organized by strand. Take the diagnostic test to find areas to focus on." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet" />
@@ -19,295 +19,166 @@
     </div>
   </header>
 
-  <!-- Two-button bar: Curriculum | Assignments -->
-  <div class="tabs" role="tablist" aria-label="Sections">
-    <div class="tabs-inner">
-      <button class="tab-btn active" id="tab-curriculum" role="tab" aria-selected="true" aria-controls="panel-curriculum" data-tab="curriculum">
-        📚 Curriculum
-      </button>
-      <button class="tab-btn" id="tab-assignments" role="tab" aria-selected="false" aria-controls="panel-assignments" data-tab="assignments">
-        📝 Assignments
-      </button>
+  <nav class="topnav" aria-label="Primary">
+    <div class="topnav-inner">
+      <a class="nav-btn active" href="index.html" aria-current="page">📚 Curriculum</a>
+      <a class="nav-btn" href="diagnostic.html">📝 Diagnostic Test</a>
     </div>
-  </div>
+  </nav>
 
   <main class="container">
+    <div class="intro">
+      <p>
+        In Ontario, every Grade 5 student learns mathematics across six strands. Strand <strong>A</strong>
+        runs through all the others — it covers the social-emotional learning skills and the
+        <em>mathematical processes</em> students use while doing math. Strands <strong>B–F</strong>
+        describe the content learned this year. When you're ready, take the
+        <a href="diagnostic.html">Diagnostic Test</a> to find out which areas to focus on.
+      </p>
+    </div>
 
-    <!-- ============ CURRICULUM PANEL ============ -->
-    <section class="panel active" id="panel-curriculum" role="tabpanel" aria-labelledby="tab-curriculum">
-      <div class="intro">
-        <p>
-          In Ontario, every Grade 5 student learns mathematics across six strands. Strand <strong>A</strong>
-          runs through all the others — it covers the social-emotional learning skills and the
-          <em>mathematical processes</em> students use while doing math. Strands <strong>B–F</strong>
-          describe the content learned this year.
-        </p>
-      </div>
+    <!-- Strand A -->
+    <section class="strand strand-a">
+      <div class="strand-head"><span class="badge">A</span><h2>Social-Emotional Learning Skills &amp; Mathematical Processes</h2></div>
+      <p class="strand-overview"><strong>A1.</strong> Apply a variety of social-emotional learning skills to support the use of the mathematical processes and learning in mathematics.</p>
+      <ul class="chips">
+        <li>Problem solving</li><li>Reasoning &amp; proving</li><li>Reflecting</li><li>Connecting</li>
+        <li>Communicating</li><li>Representing</li><li>Selecting tools &amp; strategies</li>
+      </ul>
+    </section>
 
-      <!-- Strand A -->
-      <section class="strand strand-a">
-        <div class="strand-head">
-          <span class="badge">A</span>
-          <h2>Social-Emotional Learning Skills &amp; Mathematical Processes</h2>
-        </div>
-        <p class="strand-overview">
-          <strong>A1.</strong> Apply a variety of social-emotional learning skills to support the use of the
-          mathematical processes and learning in mathematics.
-        </p>
-        <ul class="chips">
-          <li>Problem solving</li>
-          <li>Reasoning &amp; proving</li>
-          <li>Reflecting</li>
-          <li>Connecting</li>
-          <li>Communicating</li>
-          <li>Representing</li>
-          <li>Selecting tools &amp; strategies</li>
+    <!-- Strand B -->
+    <section class="strand">
+      <div class="strand-head"><span class="badge badge-b">B</span><h2>Number</h2></div>
+      <article class="substrand">
+        <h3>B1 · Number Sense</h3>
+        <p class="overall">Demonstrate an understanding of numbers and make connections to the way numbers are used in everyday life.</p>
+        <ul>
+          <li>Read, represent, compose, and decompose <strong>whole numbers up to 100&nbsp;000</strong>.</li>
+          <li>Read, represent, compose, and decompose <strong>decimal numbers to hundredths</strong>.</li>
+          <li>Round decimal numbers to the nearest tenth and whole number.</li>
+          <li>Compare and order fractions; find and use <strong>equivalent fractions</strong>.</li>
+          <li>Describe relationships and equivalences among fractions and decimals.</li>
         </ul>
-      </section>
-
-      <!-- Strand B -->
-      <section class="strand">
-        <div class="strand-head">
-          <span class="badge badge-b">B</span>
-          <h2>Number</h2>
-        </div>
-        <article class="substrand">
-          <h3>B1 · Number Sense</h3>
-          <p class="overall">Demonstrate an understanding of numbers and make connections to the way numbers are used in everyday life.</p>
-          <ul>
-            <li>Read, represent, compose, and decompose <strong>whole numbers up to 100&nbsp;000</strong>.</li>
-            <li>Read, represent, compose, and decompose <strong>decimal numbers to hundredths</strong>.</li>
-            <li>Round decimal numbers to the nearest tenth and whole number.</li>
-            <li>Compare and order fractions; find and use <strong>equivalent fractions</strong>.</li>
-            <li>Describe relationships and equivalences among fractions and decimals.</li>
-          </ul>
-        </article>
-        <article class="substrand">
-          <h3>B2 · Operations</h3>
-          <p class="overall">Use knowledge of numbers and operations to solve problems encountered in everyday life.</p>
-          <ul>
-            <li>Use the properties of operations and the <strong>order of operations</strong>.</li>
-            <li>Recall <strong>multiplication facts to 12 × 12</strong> and related division facts.</li>
-            <li>Multiply two- and three-digit numbers; divide three-digit numbers by one- and two-digit numbers.</li>
-            <li>Add and subtract <strong>decimal numbers to hundredths</strong>.</li>
-            <li>Multiply and divide <strong>decimal tenths</strong> by whole numbers.</li>
-            <li>Add and subtract <strong>fractions with like denominators</strong>.</li>
-          </ul>
-        </article>
-      </section>
-
-      <!-- Strand C -->
-      <section class="strand">
-        <div class="strand-head">
-          <span class="badge badge-c">C</span>
-          <h2>Algebra</h2>
-        </div>
-        <article class="substrand">
-          <h3>C1 · Patterns and Relationships</h3>
-          <p class="overall">Identify, describe, extend, create, and make predictions about a variety of patterns.</p>
-          <ul>
-            <li>Identify and describe increasing, decreasing, and repeating patterns and their <strong>pattern rules</strong>.</li>
-            <li>Represent patterns with tables of values and make predictions.</li>
-          </ul>
-        </article>
-        <article class="substrand">
-          <h3>C2 · Equations and Inequalities</h3>
-          <p class="overall">Demonstrate an understanding of variables, expressions, equalities, and inequalities.</p>
-          <ul>
-            <li>Use <strong>variables</strong> in expressions and equations.</li>
-            <li>Solve for unknown values; work with equalities and <strong>inequalities</strong>.</li>
-          </ul>
-        </article>
-        <article class="substrand">
-          <h3>C3 · Coding</h3>
-          <p class="overall">Solve problems and create computational representations using coding concepts and skills.</p>
-          <ul>
-            <li>Write and execute code with sequential, concurrent, repeating, and <strong>nested events</strong>.</li>
-            <li>Read and alter existing code and describe how changes affect outcomes.</li>
-          </ul>
-        </article>
-        <article class="substrand">
-          <h3>C4 · Mathematical Modelling</h3>
-          <p class="overall">Apply the process of mathematical modelling to represent, analyse, make predictions, and provide insight into real-life situations.</p>
-        </article>
-      </section>
-
-      <!-- Strand D -->
-      <section class="strand">
-        <div class="strand-head">
-          <span class="badge badge-d">D</span>
-          <h2>Data</h2>
-        </div>
-        <article class="substrand">
-          <h3>D1 · Data Literacy</h3>
-          <p class="overall">Manage, analyse, and use data to make convincing arguments and informed decisions.</p>
-          <ul>
-            <li>Collect data and organize it in <strong>frequency tables</strong>.</li>
-            <li>Determine the <strong>mean</strong> and identify the mode of a data set.</li>
-            <li>Create and interpret <strong>stem-and-leaf plots</strong> and <strong>double bar graphs</strong>.</li>
-          </ul>
-        </article>
-        <article class="substrand">
-          <h3>D2 · Probability</h3>
-          <p class="overall">Describe the likelihood that events will happen, and use that information to make predictions.</p>
-          <ul>
-            <li>Use mathematical language (likely, unlikely, certain) to describe likelihood.</li>
-            <li>Compare <strong>experimental and theoretical probability</strong>.</li>
-          </ul>
-        </article>
-      </section>
-
-      <!-- Strand E -->
-      <section class="strand">
-        <div class="strand-head">
-          <span class="badge badge-e">E</span>
-          <h2>Spatial Sense</h2>
-        </div>
-        <article class="substrand">
-          <h3>E1 · Geometric and Spatial Reasoning</h3>
-          <p class="overall">Describe and represent shape, location, and movement by applying geometric properties and spatial relationships.</p>
-          <ul>
-            <li>Identify and classify <strong>quadrilaterals</strong> by their properties.</li>
-            <li>Construct three-dimensional objects and explore their nets.</li>
-            <li>Describe <strong>location and movement</strong> on a grid using coordinates and translations.</li>
-          </ul>
-        </article>
-        <article class="substrand">
-          <h3>E2 · Measurement</h3>
-          <p class="overall">Compare, estimate, and determine measurements in various contexts.</p>
-          <ul>
-            <li>Convert and work with <strong>metric units</strong> of length, mass, and capacity.</li>
-            <li>Measure and construct <strong>angles</strong> using a protractor.</li>
-            <li>Determine the <strong>area</strong> of rectangles and the relationship between area and perimeter.</li>
-            <li>Explore the relationship between <strong>capacity and volume</strong>.</li>
-          </ul>
-        </article>
-      </section>
-
-      <!-- Strand F -->
-      <section class="strand">
-        <div class="strand-head">
-          <span class="badge badge-f">F</span>
-          <h2>Financial Literacy</h2>
-        </div>
-        <article class="substrand">
-          <h3>F1 · Money and Finances</h3>
-          <p class="overall">Demonstrate the knowledge and skills needed to make informed financial decisions.</p>
-          <ul>
-            <li>Describe methods of payment (cash, debit, credit) and estimate and calculate costs.</li>
-            <li>Make change and compare the value of purchases.</li>
-            <li>Set simple <strong>financial goals</strong> and describe how to reach them.</li>
-          </ul>
-        </article>
-      </section>
+      </article>
+      <article class="substrand">
+        <h3>B2 · Operations</h3>
+        <p class="overall">Use knowledge of numbers and operations to solve problems encountered in everyday life.</p>
+        <ul>
+          <li>Use the properties of operations and the <strong>order of operations</strong>.</li>
+          <li>Recall <strong>multiplication facts to 12 × 12</strong> and related division facts.</li>
+          <li>Multiply two- and three-digit numbers; divide three-digit numbers by one- and two-digit numbers.</li>
+          <li>Add and subtract <strong>decimal numbers to hundredths</strong>.</li>
+          <li>Multiply and divide <strong>decimal tenths</strong> by whole numbers.</li>
+          <li>Add and subtract <strong>fractions with like denominators</strong>.</li>
+        </ul>
+      </article>
     </section>
 
-    <!-- ============ ASSIGNMENTS PANEL ============ -->
-    <section class="panel" id="panel-assignments" role="tabpanel" aria-labelledby="tab-assignments" hidden>
-      <div class="intro">
-        <p>Practise each strand with these sample assignments. Try each question first, then tap <strong>“Show answer”</strong> to check your work.</p>
-      </div>
-
-      <div class="questions">
-        <h3 class="q-title"><span class="badge badge-b q-badge">B</span> Number</h3>
-        <ol class="q-list">
-          <li>Write <strong>47&nbsp;205</strong> in expanded form.
-            <details><summary>Show answer</summary><p>40&nbsp;000 + 7&nbsp;000 + 200 + 0 + 5</p></details>
-          </li>
-          <li>Which is greater, <strong>3/4</strong> or <strong>5/8</strong>? Explain.
-            <details><summary>Show answer</summary><p>3/4 = 6/8, and 6/8 &gt; 5/8, so <strong>3/4 is greater</strong>.</p></details>
-          </li>
-          <li>Round <strong>6.47</strong> to the nearest tenth.
-            <details><summary>Show answer</summary><p>6.5 (the hundredths digit 7 rounds the tenths up).</p></details>
-          </li>
-          <li>Calculate <strong>24 × 36</strong>.
-            <details><summary>Show answer</summary><p>864</p></details>
-          </li>
-          <li>Calculate <strong>3.75 + 2.6</strong> and <strong>2/5 + 1/5</strong>.
-            <details><summary>Show answer</summary><p>3.75 + 2.6 = <strong>6.35</strong>; 2/5 + 1/5 = <strong>3/5</strong>.</p></details>
-          </li>
-        </ol>
-      </div>
-
-      <div class="questions">
-        <h3 class="q-title"><span class="badge badge-c q-badge">C</span> Algebra</h3>
-        <ol class="q-list">
-          <li>A pattern begins <strong>4, 7, 10, 13, …</strong> State the pattern rule and find the 8th term.
-            <details><summary>Show answer</summary><p>Rule: start at 4 and add 3 each time. 8th term = 4 + 7 × 3 = <strong>25</strong>.</p></details>
-          </li>
-          <li>Solve for <strong>n</strong>: &nbsp; n + 8 = 21.
-            <details><summary>Show answer</summary><p>n = 21 − 8 = <strong>13</strong>.</p></details>
-          </li>
-          <li>True or false? &nbsp; 5 × 4 &gt; 3 × 7.
-            <details><summary>Show answer</summary><p>20 &gt; 21 is <strong>false</strong>.</p></details>
-          </li>
-          <li><strong>Coding:</strong> Write code (in words) to make a turtle draw a square using a repeat loop.
-            <details><summary>Show answer</summary><p>repeat 4 times { move forward 50 steps; turn right 90° }</p></details>
-          </li>
-        </ol>
-      </div>
-
-      <div class="questions">
-        <h3 class="q-title"><span class="badge badge-d q-badge">D</span> Data</h3>
-        <ol class="q-list">
-          <li>Find the <strong>mean</strong> of: 4, 8, 6, 10, 7.
-            <details><summary>Show answer</summary><p>(4 + 8 + 6 + 10 + 7) ÷ 5 = 35 ÷ 5 = <strong>7</strong>.</p></details>
-          </li>
-          <li>A spinner has 4 equal sections: red, blue, green, yellow. What is the probability of landing on <strong>green</strong>?
-            <details><summary>Show answer</summary><p>1 out of 4, or <strong>1/4</strong>.</p></details>
-          </li>
-          <li>A bag has 3 red and 2 blue marbles. What is the probability of drawing a <strong>red</strong> marble?
-            <details><summary>Show answer</summary><p>3 out of 5, or <strong>3/5</strong>.</p></details>
-          </li>
-        </ol>
-      </div>
-
-      <div class="questions">
-        <h3 class="q-title"><span class="badge badge-e q-badge">E</span> Spatial Sense</h3>
-        <ol class="q-list">
-          <li>A rectangle is <strong>8 cm by 5 cm</strong>. Find its area and perimeter.
-            <details><summary>Show answer</summary><p>Area = 8 × 5 = <strong>40 cm²</strong>; Perimeter = 2 × (8 + 5) = <strong>26 cm</strong>.</p></details>
-          </li>
-          <li>How many <strong>faces, edges, and vertices</strong> does a rectangular prism have?
-            <details><summary>Show answer</summary><p>6 faces, 12 edges, 8 vertices.</p></details>
-          </li>
-          <li>Convert <strong>3 m</strong> to centimetres.
-            <details><summary>Show answer</summary><p>3 × 100 = <strong>300 cm</strong>.</p></details>
-          </li>
-          <li>Name a quadrilateral with exactly <strong>one pair of parallel sides</strong>.
-            <details><summary>Show answer</summary><p>A <strong>trapezoid</strong>.</p></details>
-          </li>
-        </ol>
-      </div>
-
-      <div class="questions">
-        <h3 class="q-title"><span class="badge badge-f q-badge">F</span> Financial Literacy</h3>
-        <ol class="q-list">
-          <li>You buy snacks for <strong>$4.75</strong> and pay with a <strong>$10</strong> bill. How much change do you get?
-            <details><summary>Show answer</summary><p>$10.00 − $4.75 = <strong>$5.25</strong>.</p></details>
-          </li>
-          <li>You want to save <strong>$60 in 5 weeks</strong>. How much must you save each week?
-            <details><summary>Show answer</summary><p>$60 ÷ 5 = <strong>$12 per week</strong>.</p></details>
-          </li>
-          <li>A toy costs $18. It is on sale for <strong>$3 off</strong>. What is the sale price, and what fraction did you save?
-            <details><summary>Show answer</summary><p>Sale price = $15. You saved 3/18 = <strong>1/6</strong> of the original price.</p></details>
-          </li>
-        </ol>
-      </div>
+    <!-- Strand C -->
+    <section class="strand">
+      <div class="strand-head"><span class="badge badge-c">C</span><h2>Algebra</h2></div>
+      <article class="substrand">
+        <h3>C1 · Patterns and Relationships</h3>
+        <p class="overall">Identify, describe, extend, create, and make predictions about a variety of patterns.</p>
+        <ul>
+          <li>Identify and describe increasing, decreasing, and repeating patterns and their <strong>pattern rules</strong>.</li>
+          <li>Represent patterns with tables of values and make predictions.</li>
+        </ul>
+      </article>
+      <article class="substrand">
+        <h3>C2 · Equations and Inequalities</h3>
+        <p class="overall">Demonstrate an understanding of variables, expressions, equalities, and inequalities.</p>
+        <ul>
+          <li>Use <strong>variables</strong> in expressions and equations.</li>
+          <li>Solve for unknown values; work with equalities and <strong>inequalities</strong>.</li>
+        </ul>
+      </article>
+      <article class="substrand">
+        <h3>C3 · Coding</h3>
+        <p class="overall">Solve problems and create computational representations using coding concepts and skills.</p>
+        <ul>
+          <li>Write and execute code with sequential, concurrent, repeating, and <strong>nested events</strong>.</li>
+          <li>Read and alter existing code and describe how changes affect outcomes.</li>
+        </ul>
+      </article>
+      <article class="substrand">
+        <h3>C4 · Mathematical Modelling</h3>
+        <p class="overall">Apply the process of mathematical modelling to represent, analyse, make predictions, and provide insight into real-life situations.</p>
+      </article>
     </section>
 
+    <!-- Strand D -->
+    <section class="strand">
+      <div class="strand-head"><span class="badge badge-d">D</span><h2>Data</h2></div>
+      <article class="substrand">
+        <h3>D1 · Data Literacy</h3>
+        <p class="overall">Manage, analyse, and use data to make convincing arguments and informed decisions.</p>
+        <ul>
+          <li>Collect data and organize it in <strong>frequency tables</strong>.</li>
+          <li>Determine the <strong>mean</strong> and identify the mode of a data set.</li>
+          <li>Create and interpret <strong>stem-and-leaf plots</strong> and <strong>double bar graphs</strong>.</li>
+        </ul>
+      </article>
+      <article class="substrand">
+        <h3>D2 · Probability</h3>
+        <p class="overall">Describe the likelihood that events will happen, and use that information to make predictions.</p>
+        <ul>
+          <li>Use mathematical language (likely, unlikely, certain) to describe likelihood.</li>
+          <li>Compare <strong>experimental and theoretical probability</strong>.</li>
+        </ul>
+      </article>
+    </section>
+
+    <!-- Strand E -->
+    <section class="strand">
+      <div class="strand-head"><span class="badge badge-e">E</span><h2>Spatial Sense</h2></div>
+      <article class="substrand">
+        <h3>E1 · Geometric and Spatial Reasoning</h3>
+        <p class="overall">Describe and represent shape, location, and movement by applying geometric properties and spatial relationships.</p>
+        <ul>
+          <li>Identify and classify <strong>quadrilaterals</strong> by their properties.</li>
+          <li>Construct three-dimensional objects and explore their nets.</li>
+          <li>Describe <strong>location and movement</strong> on a grid using coordinates and translations.</li>
+        </ul>
+      </article>
+      <article class="substrand">
+        <h3>E2 · Measurement</h3>
+        <p class="overall">Compare, estimate, and determine measurements in various contexts.</p>
+        <ul>
+          <li>Convert and work with <strong>metric units</strong> of length, mass, and capacity.</li>
+          <li>Measure and construct <strong>angles</strong> using a protractor.</li>
+          <li>Determine the <strong>area</strong> of rectangles and the relationship between area and perimeter.</li>
+          <li>Explore the relationship between <strong>capacity and volume</strong>.</li>
+        </ul>
+      </article>
+    </section>
+
+    <!-- Strand F -->
+    <section class="strand">
+      <div class="strand-head"><span class="badge badge-f">F</span><h2>Financial Literacy</h2></div>
+      <article class="substrand">
+        <h3>F1 · Money and Finances</h3>
+        <p class="overall">Demonstrate the knowledge and skills needed to make informed financial decisions.</p>
+        <ul>
+          <li>Describe methods of payment (cash, debit, credit) and estimate and calculate costs.</li>
+          <li>Make change and compare the value of purchases.</li>
+          <li>Set simple <strong>financial goals</strong> and describe how to reach them.</li>
+        </ul>
+      </article>
+    </section>
+
+    <div class="cta-card">
+      <h2>Ready to find your focus areas?</h2>
+      <p>Take the diagnostic test — 20 questions across all five strands. You'll get a personalized breakdown of where you're strong and where to practise.</p>
+      <a class="cta-btn" href="diagnostic.html">📝 Start the Diagnostic Test</a>
+    </div>
   </main>
 
   <footer class="site-footer">
-    <p>
-      <strong>AbbyMath</strong> · Grade 5 content aligned to
-      <a href="https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-mathematics" target="_blank" rel="noopener">
-        The Ontario Curriculum, Grades 1–8: Mathematics (2020)</a>.
-    </p>
-    <p class="fineprint">
-      An educational summary of the curriculum, paraphrased for families and students. For the complete official
-      expectations, refer to the Ontario Ministry of Education source above.
-    </p>
+    <p><strong>AbbyMath</strong> · Grade 5 content aligned to
+      <a href="https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-mathematics" target="_blank" rel="noopener">The Ontario Curriculum, Grades 1–8: Mathematics (2020)</a>.</p>
+    <p class="fineprint">An educational summary of the curriculum, paraphrased for families and students. For the complete official expectations, refer to the Ontario Ministry of Education source above.</p>
   </footer>
 
   <script defer src="app.js"></script>

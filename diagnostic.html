@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AbbyMath — Grade 5 Diagnostic Test</title>
+  <meta name="description" content="A Grade 5 math diagnostic test across all Ontario strands. Find out which areas need more practice." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="hero hero-sm">
+    <div class="hero-inner">
+      <div class="logo">🧮 <span>Abby<strong>Math</strong></span></div>
+      <h1>Grade 5 Diagnostic Test</h1>
+      <p class="tagline">20 questions · all five strands · find your focus areas.</p>
+    </div>
+  </header>
+
+  <nav class="topnav" aria-label="Primary">
+    <div class="topnav-inner">
+      <a class="nav-btn" href="index.html">📚 Curriculum</a>
+      <a class="nav-btn active" href="diagnostic.html" aria-current="page">📝 Diagnostic Test</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <div class="intro" id="test-intro">
+      <p>
+        Answer every question as best you can — there's no time limit. When you're done, press
+        <strong>“See my results”</strong> at the bottom. You'll get a score for each strand
+        (Number, Algebra, Data, Spatial Sense, Financial Literacy) and a list of areas to focus on.
+        Guessing is okay, but try your best so the results are accurate!
+      </p>
+    </div>
+
+    <!-- Quiz form is built by diagnostic.js -->
+    <form id="quiz" novalidate></form>
+
+    <div id="quiz-actions" class="quiz-actions">
+      <p class="progress" id="progress">0 of 20 answered</p>
+      <button type="button" id="submit-btn" class="cta-btn">See my results</button>
+    </div>
+
+    <!-- Results appear here -->
+    <section id="results" class="results" hidden aria-live="polite"></section>
+  </main>
+
+  <footer class="site-footer">
+    <p><strong>AbbyMath</strong> · Diagnostic aligned to
+      <a href="https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-mathematics" target="_blank" rel="noopener">The Ontario Curriculum, Grades 1–8: Mathematics (2020)</a>.</p>
+    <p class="fineprint">This diagnostic is a quick check for practice planning, not an official assessment.</p>
+  </footer>
+
+  <script defer src="diagnostic.js"></script>
+</body>
+</html>
