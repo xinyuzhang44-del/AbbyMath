@@ -70,6 +70,17 @@
   var historyEl = document.getElementById("history");
   var TOTAL = QUESTIONS.length;
 
+  // Fisher-Yates shuffle of [0..n-1] so the correct option isn't always in the same spot.
+  function shuffledIndices(n) {
+    var a = [];
+    for (var i = 0; i < n; i++) a.push(i);
+    for (var j = n - 1; j > 0; j--) {
+      var k = Math.floor(Math.random() * (j + 1));
+      var t = a[j]; a[j] = a[k]; a[k] = t;
+    }
+    return a;
+  }
+
   // ---- Build quiz ----
   QUESTIONS.forEach(function (item, qi) {
     var s = STRANDS[item.strand];
@@ -87,13 +98,13 @@
     card.appendChild(qtext);
     var opts = document.createElement("div");
     opts.className = "qopts";
-    item.options.forEach(function (opt, oi) {
+    shuffledIndices(item.options.length).forEach(function (oi) {
       var id = "q" + qi + "o" + oi;
       var label = document.createElement("label");
       label.className = "qopt";
       label.setAttribute("for", id);
       label.innerHTML = '<input type="radio" id="' + id + '" name="q' + qi + '" value="' + oi + '"><span class="qopt-text"></span>';
-      label.querySelector(".qopt-text").textContent = opt;
+      label.querySelector(".qopt-text").textContent = item.options[oi];
       opts.appendChild(label);
     });
     card.appendChild(opts);
@@ -151,8 +162,10 @@
   function annotateCard(qi, item, chosenIdx, ok) {
     var card = form.children[qi];
     card.classList.add(ok ? "qcard-correct" : "qcard-wrong");
-    card.querySelectorAll(".qopt").forEach(function (label, oi) {
-      label.querySelector("input").disabled = true;
+    card.querySelectorAll(".qopt").forEach(function (label) {
+      var input = label.querySelector("input");
+      input.disabled = true;
+      var oi = parseInt(input.value, 10);
       if (oi === item.answer) label.classList.add("opt-correct");
       if (oi === chosenIdx && !ok) label.classList.add("opt-wrong");
     });

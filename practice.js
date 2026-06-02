@@ -162,10 +162,10 @@
     subEl.innerHTML = "10 questions · " + t.zh + " · Ontario Grade 5 (" + t.strand + ")";
 
     var cardsHtml = bank.map(function (item, qi) {
-      var opts = item.options.map(function (opt, oi) {
+      var opts = shuffledIndices(item.options.length).map(function (oi) {
         var id = "p" + qi + "o" + oi;
         return '<label class="qopt" for="' + id + '"><input type="radio" id="' + id + '" name="p' + qi + '" value="' + oi + '">' +
-          '<span class="qopt-text">' + escapeHtml(opt) + "</span></label>";
+          '<span class="qopt-text">' + escapeHtml(item.options[oi]) + "</span></label>";
       }).join("");
       return '<div class="qcard" style="--accent:' + t.color + '">' +
         '<div class="qcard-head"><span class="qnum">Q' + (qi + 1) + '</span>' +
@@ -216,8 +216,10 @@
         if (ok) score++;
         var card = form.children[qi];
         card.classList.add(ok ? "qcard-correct" : "qcard-wrong");
-        card.querySelectorAll(".qopt").forEach(function (label, oi) {
-          label.querySelector("input").disabled = true;
+        card.querySelectorAll(".qopt").forEach(function (label) {
+          var input = label.querySelector("input");
+          input.disabled = true;
+          var oi = parseInt(input.value, 10);
           if (oi === item.answer) label.classList.add("opt-correct");
           if (oi === ci && !ok) label.classList.add("opt-wrong");
         });
@@ -250,6 +252,16 @@
         window.scrollTo({ top: 0, behavior: "smooth" });
       });
     });
+  }
+
+  function shuffledIndices(n) {
+    var a = [];
+    for (var i = 0; i < n; i++) a.push(i);
+    for (var j = n - 1; j > 0; j--) {
+      var k = Math.floor(Math.random() * (j + 1));
+      var t = a[j]; a[j] = a[k]; a[k] = t;
+    }
+    return a;
   }
 
   function escapeHtml(s) {
