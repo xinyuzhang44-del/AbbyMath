@@ -160,6 +160,34 @@ body {
 .hd-ok { color: #15803d; }
 .hd-no { color: #b91c1c; }
 
+/* ---------- Knowledge-gap pie chart ---------- */
+.pie-title { font-family: "Fredoka", sans-serif; font-size: 1.15rem; text-align: center; margin: 22px 0 14px; }
+.pie-wrap { display: flex; flex-wrap: wrap; gap: 22px; align-items: center; justify-content: center; margin-bottom: 8px; }
+.pie-box { flex: 0 0 auto; }
+.pie { width: 240px; height: 240px; display: block; }
+.pie .slice path, .pie .slice circle { cursor: pointer; transition: transform 0.15s ease, opacity 0.15s ease; transform-origin: 140px 140px; }
+.pie .slice:hover path, .pie .slice:hover circle { opacity: 0.85; transform: scale(1.04); }
+.legend { flex: 1 1 260px; min-width: 240px; display: grid; gap: 8px; }
+.legend-item { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); background: #f7f9ff; border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px; transition: background 0.15s ease, transform 0.12s ease; }
+.legend-item:hover { background: #eef2ff; transform: translateX(2px); }
+.legend-dot { width: 14px; height: 14px; border-radius: 4px; flex: 0 0 auto; }
+.legend-name { font-weight: 700; flex: 1; }
+.legend-zh { color: var(--muted); font-weight: 400; font-size: 0.85rem; }
+.legend-missed { color: #b91c1c; font-weight: 700; font-size: 0.82rem; white-space: nowrap; }
+.legend-go { color: var(--b); font-weight: 700; font-size: 0.82rem; white-space: nowrap; margin-left: 8px; }
+
+/* ---------- Practice topic menu ---------- */
+.topic-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+.topic-card { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; box-shadow: var(--shadow); transition: transform 0.18s ease, box-shadow 0.18s ease; }
+.topic-card:hover { transform: translateY(-4px); box-shadow: 0 14px 30px rgba(31, 36, 51, 0.12); }
+.topic-dot { width: 18px; height: 18px; border-radius: 6px; flex: 0 0 auto; }
+.topic-name { font-family: "Fredoka", sans-serif; font-weight: 600; flex: 1; }
+.topic-go { color: var(--b); font-weight: 700; font-size: 0.85rem; white-space: nowrap; }
+
+@media (max-width: 560px) {
+  .legend-go { display: none; }
+}
+
 .quiz-actions { text-align: center; margin: 6px 0 10px; }
 .progress { color: var(--muted); font-weight: 700; margin: 0 0 12px; }
 .progress-warn { color: #dc2626; }

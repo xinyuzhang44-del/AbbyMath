@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AbbyMath — Grade 5 Targeted Practice</title>
+  <meta name="description" content="Targeted Grade 5 practice sets (10 questions per topic), aligned to the Ontario Mathematics curriculum." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="hero hero-sm">
+    <div class="hero-inner">
+      <div class="logo">🧮 <span>Abby<strong>Math</strong></span></div>
+      <h1 id="practice-title">Targeted Practice</h1>
+      <p class="tagline" id="practice-sub">10 questions · aligned to the Ontario Grade 5 curriculum.</p>
+    </div>
+  </header>
+
+  <nav class="topnav" aria-label="Primary">
+    <div class="topnav-inner">
+      <a class="nav-btn" href="index.html">📚 Curriculum</a>
+      <a class="nav-btn" href="diagnostic.html">📝 Diagnostic Test</a>
+      <a class="nav-btn" href="practice.html">🎯 Practice</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <div id="practice-root"></div>
+  </main>
+
+  <footer class="site-footer">
+    <p><strong>AbbyMath</strong> · Practice aligned to
+      <a href="https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-mathematics" target="_blank" rel="noopener">The Ontario Curriculum, Grades 1–8: Mathematics (2020)</a>.</p>
+    <p class="fineprint">Practice for review and planning — not an official assessment.</p>
+  </footer>
+
+  <script defer src="topics.js"></script>
+  <script defer src="practice.js"></script>
+</body>
+</html>
