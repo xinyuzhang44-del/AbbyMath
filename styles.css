@@ -251,6 +251,14 @@ body {
 
 .encourage { text-align: center; font-size: 1.05rem; font-weight: 700; margin: 4px 0 8px; color: var(--ink); }
 .encourage.celebrate { animation: celebrate 0.6s ease; }
+
+.factor-eg { color: var(--muted); font-weight: 400; font-size: 0.85rem; }
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(90px, 1fr)); gap: 12px; margin: 6px 0 16px; }
+.stat { background: #f7f9ff; border: 1px solid var(--line); border-radius: 12px; padding: 14px 10px; text-align: center; }
+.stat-num { font-family: "Fredoka", sans-serif; font-size: 1.6rem; color: #3b3bff; line-height: 1.1; }
+.stat-lbl { color: var(--muted); font-size: 0.82rem; font-weight: 700; margin-top: 2px; }
+.improve { text-align: center; background: #fff7ed; border: 1px solid #fed7aa; color: #9a3412; border-radius: 10px; padding: 10px 14px; margin: 0 0 14px; font-weight: 700; }
+.improve.good { background: #f0fdf4; border-color: #bbf7d0; color: #14532d; }
 @keyframes celebrate { 0% { transform: scale(0.8); opacity: 0; } 50% { transform: scale(1.08); } 100% { transform: scale(1); opacity: 1; } }
 
 .quiz-actions { text-align: center; margin: 6px 0 10px; }

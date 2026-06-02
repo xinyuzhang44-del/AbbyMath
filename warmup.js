@@ -8,6 +8,7 @@
   // ---------- small helpers ----------
   function ri(r, min, max) { return Math.floor(r() * (max - min + 1)) + min; }
   function pick(r, arr) { return arr[Math.floor(r() * arr.length)]; }
+  function shuffleArr(a) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
   function pad(n) { return n < 10 ? "0" + n : "" + n; }
   function fmtMoney(cents) { return Math.floor(cents / 100) + "." + pad(cents % 100); }
   function moneyCents(s) {
@@ -60,6 +61,16 @@
     }
     var x = pick(r, [6, 7, 8, 9]), y = ri(r, 3, 12), p = x * y;
     return { prompt: p + " ÷ " + x + " = ?", answer: String(y), type: "int", placeholder: "number" };
+  }
+  // single multiplication / division fact (factor 6-9, multiplier 1-12) — used by Daily mix
+  function gMultFact(r, i) {
+    var f = pick(r, [6, 7, 8, 9]), m = ri(r, 1, 12);
+    if (r() < 0.5) return { prompt: m + " × " + f + " = ?", answer: String(m * f), type: "int", placeholder: "number" };
+    return { prompt: f + " × " + m + " = ?", answer: String(m * f), type: "int", placeholder: "number" };
+  }
+  function gDivFact(r, i) {
+    var f = pick(r, [6, 7, 8, 9]), m = ri(r, 1, 12);
+    return { prompt: (m * f) + " ÷ " + f + " = ?", answer: String(m), type: "int", placeholder: "number" };
   }
 
   function gRegroupSimple(r, i) {
@@ -235,9 +246,9 @@
   var TOPICS = [
     { key: "facts", name: "Multiplication & Division Facts", zh: "乘除法事实 (6, 7, 8, 9)", color: "#db2777", icon: "✖️",
       tasks: [
-        { name: "Task 1 · Basic fluency", gen: gFactsBasic, makeSet: function (n) { return FACTS.makeSet(n); } },
-        { name: "Task 2 · Mixed operations", gen: gFactsMixed, makeSet: function (n) { return FACTS.makeSet(n); } },
-        { name: "Task 3 · Timed challenge", gen: gFactsTimed, timed: true, makeSet: function (n) { return FACTS.makeSet(n); } },
+        { name: "Task 1 · Multiplication Practice", flow: "factor", op: "mult", gen: gMultFact },
+        { name: "Task 2 · Division Practice", flow: "factor", op: "div", gen: gDivFact },
+        { name: "Task 3 · Mixed Fluency Challenge", flow: "mixed", op: "mixed", timed: true, gen: gFactsMixed, makeSet: function (n) { return FACTS.makeSet(n); } },
       ] },
     { key: "regroup", name: "Addition & Subtraction with Regrouping", zh: "进位 / 退位加减法", color: "#2563eb", icon: "➕",
       tasks: [
@@ -279,11 +290,18 @@
   // ---------- storage ----------
   function load() { try { return JSON.parse(localStorage.getItem(STORE_KEY)) || { tasks: {}, log: [] }; } catch (e) { return { tasks: {}, log: [] }; } }
   function save(d) { try { localStorage.setItem(STORE_KEY, JSON.stringify(d)); } catch (e) {} }
-  function recordResult(id, label, score, total, items) {
+  function recordResult(id, label, score, total, items, seconds) {
     var d = load(), pct = Math.round((score / total) * 100);
     var prev = d.tasks[id] || { bestPct: 0, attempts: 0 };
-    d.tasks[id] = { bestPct: Math.max(prev.bestPct, pct), lastPct: pct, attempts: prev.attempts + 1, completed: Math.max(prev.bestPct, pct) >= 80 };
-    d.log.push({ date: new Date().toISOString(), id: id, label: label, pct: pct, score: score, total: total, items: items || [] });
+    var best = prev.bestSeconds;
+    if (seconds != null && (best == null || seconds < best)) best = seconds;
+    d.tasks[id] = {
+      bestPct: Math.max(prev.bestPct, pct), lastPct: pct, attempts: prev.attempts + 1,
+      completed: Math.max(prev.bestPct, pct) >= 80,
+      bestSeconds: (best == null ? prev.bestSeconds : best),
+      lastSeconds: (seconds != null ? seconds : prev.lastSeconds),
+    };
+    d.log.push({ date: new Date().toISOString(), id: id, label: label, pct: pct, score: score, total: total, seconds: (seconds != null ? seconds : null), items: items || [] });
     if (d.log.length > 80) d.log = d.log.slice(d.log.length - 80);
     save(d);
   }
@@ -327,13 +345,25 @@
     var cards = TOPICS.map(function (t) {
       var isWeak = weak && weak.key === t.key;
       var taskBtns = t.tasks.map(function (task, ti) {
+        if (task.flow === "factor" || task.flow === "mixed") {
+          var status;
+          if (task.flow === "mixed") {
+            var sm = load().tasks["facts:mixed"];
+            status = !sm ? '<span class="task-status">Not started</span>'
+              : '<span class="task-status' + (sm.completed ? " done" : "") + '">Best ' + sm.bestPct + "%" + (sm.bestSeconds != null ? " · " + sm.bestSeconds + "s" : "") + "</span>";
+          } else {
+            status = '<span class="task-status">Choose a factor →</span>';
+          }
+          return '<button type="button" class="task-btn" data-flow="' + task.flow + '" data-op="' + (task.op || "") + '">' +
+            '<span class="task-name">' + task.name + ' <span class="timed-tag">⏱</span></span>' + status + "</button>";
+        }
         var id = t.key + ":" + ti;
         var s = load().tasks[id];
-        var status = !s ? '<span class="task-status">Not started</span>'
+        var status2 = !s ? '<span class="task-status">Not started</span>'
           : s.completed ? '<span class="task-status done">✓ ' + s.bestPct + "%</span>"
           : '<span class="task-status">Best ' + s.bestPct + "%</span>";
         return '<button type="button" class="task-btn" data-topic="' + t.key + '" data-task="' + ti + '">' +
-          '<span class="task-name">' + task.name + (task.timed ? ' <span class="timed-tag">⏱</span>' : "") + "</span>" + status + "</button>";
+          '<span class="task-name">' + task.name + (task.timed ? ' <span class="timed-tag">⏱</span>' : "") + "</span>" + status2 + "</button>";
       }).join("");
       return '<section class="wtopic' + (isWeak ? " wtopic-weak" : "") + '" style="--tc:' + t.color + '">' +
         '<div class="wtopic-head"><span class="wtopic-icon">' + t.icon + "</span>" +
@@ -349,7 +379,12 @@
     var db = document.getElementById("daily-btn");
     if (db) db.addEventListener("click", startDaily);
     root.querySelectorAll(".task-btn").forEach(function (btn) {
-      btn.addEventListener("click", function () { startTask(btn.dataset.topic, parseInt(btn.dataset.task, 10)); });
+      btn.addEventListener("click", function () {
+        var flow = btn.dataset.flow;
+        if (flow === "factor") renderFactorMenu(btn.dataset.op);
+        else if (flow === "mixed") startMixed();
+        else startTask(btn.dataset.topic, parseInt(btn.dataset.task, 10));
+      });
     });
     wireClear(root, function () { renderMenu(); });
   }
@@ -364,7 +399,7 @@
       }).join("");
       return '<details class="hist-item"><summary>' +
         '<span class="hist-num">' + escapeHtml(e.label) + "</span>" +
-        '<span class="hist-score">' + e.score + "/" + e.total + " · " + e.pct + "%</span>" +
+        '<span class="hist-score">' + e.score + "/" + e.total + " · " + e.pct + "%" + (e.seconds != null ? " · " + e.seconds + "s" : "") + "</span>" +
         '<span class="hist-date">' + fmtDate(e.date) + "</span></summary>" +
         (items ? '<ul class="hist-detail">' + items + "</ul>" : "") + "</details>";
     }).join("");
@@ -410,6 +445,68 @@
       timed: !!task.timed,
       questions: build(),
       regen: build,
+    });
+  }
+
+  // 20 questions for one factor family (multiplier 1..12 via a rotating shuffle)
+  function buildFactorSet(op, F, n) {
+    n = n || 20;
+    var qs = [], mq = [];
+    function nextM() { if (!mq.length) { for (var k = 1; k <= 12; k++) mq.push(k); shuffleArr(mq); } return mq.pop(); }
+    for (var i = 0; i < n; i++) {
+      var m = nextM(), p = m * F;
+      if (op === "mult") {
+        if (Math.random() < 0.5) qs.push({ prompt: m + " × " + F + " = ?", answer: String(p), type: "int", placeholder: "number" });
+        else qs.push({ prompt: F + " × " + m + " = ?", answer: String(p), type: "int", placeholder: "number" });
+      } else {
+        qs.push({ prompt: p + " ÷ " + F + " = ?", answer: String(m), type: "int", placeholder: "number" });
+      }
+    }
+    return qs;
+  }
+
+  function renderFactorMenu(op) {
+    var topic = TOPIC_BY_KEY["facts"];
+    var opName = op === "mult" ? "Multiplication" : "Division";
+    var sym = op === "mult" ? "×" : "÷";
+    var cards = [6, 7, 8, 9].map(function (F) {
+      var s = load().tasks["facts:" + op + ":" + F];
+      var status = !s ? '<span class="task-status">Not started</span>'
+        : '<span class="task-status' + (s.completed ? " done" : "") + '">Best ' + s.bestPct + "%" + (s.bestSeconds != null ? " · " + s.bestSeconds + "s" : "") + "</span>";
+      var eg = op === "mult" ? ("n " + sym + " " + F) : ((F * 3) + " " + sym + " " + F);
+      return '<button type="button" class="task-btn factor-card" data-op="' + op + '" data-factor="' + F + '">' +
+        '<span class="task-name">Factor ' + F + ' <span class="factor-eg">(e.g. ' + eg + ')</span></span>' + status + "</button>";
+    }).join("");
+    root.innerHTML =
+      '<div class="run-head"><button type="button" class="back-btn" id="back-btn">← Back to Warm-Up</button>' +
+        '<h2 class="run-title" style="color:' + topic.color + '">' + opName + " Practice</h2></div>" +
+      '<p class="wintro">Choose a factor family. Each set is <strong>20 timed questions</strong>, randomized and unlimited — focus on speed and fluency. ⏱</p>' +
+      '<div class="task-list">' + cards + "</div>";
+    document.getElementById("back-btn").addEventListener("click", function () { renderMenu(); window.scrollTo({ top: 0 }); });
+    root.querySelectorAll(".factor-card").forEach(function (b) {
+      b.addEventListener("click", function () { startFactorPractice(b.dataset.op, parseInt(b.dataset.factor, 10)); window.scrollTo({ top: 0 }); });
+    });
+  }
+
+  function startFactorPractice(op, F) {
+    var topic = TOPIC_BY_KEY["facts"];
+    var opName = op === "mult" ? "Multiplication" : "Division";
+    var sym = op === "mult" ? "×" : "÷";
+    var build = function () { return buildFactorSet(op, F, 20); };
+    runSet({
+      id: "facts:" + op + ":" + F,
+      label: opName + " " + sym + " " + F + " — Factor " + F,
+      color: topic.color, timed: true, questions: build(), regen: build,
+      backTo: function () { renderFactorMenu(op); },
+    });
+  }
+
+  function startMixed() {
+    var topic = TOPIC_BY_KEY["facts"];
+    var build = function () { return FACTS.makeSet(20); };
+    runSet({
+      id: "facts:mixed", label: "Mixed Fluency Challenge — 6, 7, 8, 9",
+      color: topic.color, timed: true, questions: build(), regen: build,
     });
   }
 
@@ -461,7 +558,7 @@
     var results = document.getElementById("run-results");
     var N = cfg.questions.length;
 
-    document.getElementById("back-btn").addEventListener("click", function () { renderMenu(); window.scrollTo({ top: 0 }); });
+    document.getElementById("back-btn").addEventListener("click", function () { if (cfg.backTo) cfg.backTo(); else renderMenu(); window.scrollTo({ top: 0 }); });
 
     var histBtn = document.getElementById("hist-btn");
     var histPanel = document.getElementById("run-history");
@@ -517,30 +614,45 @@
 
       var pct = Math.round((score / N) * 100);
       var secs = Math.round((Date.now() - startTime) / 1000);
-      recordResult(cfg.id, cfg.label, score, N, items);
+      var prevBest = (load().tasks[cfg.id] || {}).bestSeconds;
+      recordResult(cfg.id, cfg.label, score, N, items, cfg.timed ? secs : null);
+      var bestSeconds = (load().tasks[cfg.id] || {}).bestSeconds;
 
       var msg = pct === 100 ? "Perfect! 🌟 You nailed every one!"
         : pct >= 80 ? "Great job! 🎉 You're getting strong at this."
         : pct >= 60 ? "Nice work — almost there! Try the ones you missed. 👍"
         : "Keep practising — you've got this! 💪";
 
+      var stats = '<div class="stat-grid">' +
+        (cfg.timed ? '<div class="stat"><div class="stat-num">' + secs + 's</div><div class="stat-lbl">Time</div></div>' : "") +
+        '<div class="stat"><div class="stat-num">' + score + "/" + N + '</div><div class="stat-lbl">Correct</div></div>' +
+        '<div class="stat"><div class="stat-num">' + pct + '%</div><div class="stat-lbl">Accuracy</div></div>' +
+        (cfg.timed ? '<div class="stat"><div class="stat-num">' + (bestSeconds != null ? bestSeconds + "s" : "—") + '</div><div class="stat-lbl">Best time</div></div>' : "") +
+        "</div>";
+      var improve = "";
+      if (cfg.timed) {
+        if (prevBest == null) improve = '<div class="improve">⭐ First run recorded — ' + secs + 's is your time to beat!</div>';
+        else if (secs < prevBest) improve = '<div class="improve good">🚀 New best time! You improved by ' + (prevBest - secs) + 's.</div>';
+        else if (secs === prevBest) improve = '<div class="improve good">🚀 You matched your best time!</div>';
+        else improve = '<div class="improve">Your best is ' + prevBest + 's — ' + (secs - prevBest) + 's to beat it. Keep going!</div>';
+      }
+
       results.innerHTML =
-        '<h2 class="res-title">' + (pct >= 80 ? "🎉 " : "") + score + " / " + N + " correct</h2>" +
-        '<div class="res-overall"><div class="res-overall-num" style="color:' + cfg.color + '">' + pct + "%</div>" +
-          (cfg.timed ? '<div class="res-overall-pct">finished in ' + secs + "s</div>" : "") + "</div>" +
+        '<h2 class="res-title">' + (pct >= 80 ? "🎉 " : "") + "Results</h2>" +
+        stats + improve +
         '<div class="encourage' + (pct >= 80 ? " celebrate" : "") + '">' + msg + "</div>" +
         '<div class="res-actions">' +
           (wrong.length ? '<button type="button" class="cta-btn" id="retry-wrong">Retry ' + wrong.length + " incorrect</button> " : "") +
           (cfg.regen ? '<button type="button" class="nav-btn" id="new-set">New set</button> ' : "") +
-          '<button type="button" class="nav-btn" id="to-menu">← All warm-ups</button></div>';
+          '<button type="button" class="nav-btn" id="to-menu">← Back</button></div>';
       results.hidden = false;
       results.scrollIntoView({ behavior: "smooth", block: "start" });
 
       var rw = document.getElementById("retry-wrong");
-      if (rw) rw.addEventListener("click", function () { runSet({ id: cfg.id, label: cfg.label + " (retry)", color: cfg.color, timed: cfg.timed, questions: wrong.slice(), regen: cfg.regen }); window.scrollTo({ top: 0 }); });
+      if (rw) rw.addEventListener("click", function () { runSet({ id: cfg.id, label: cfg.label + " (retry)", color: cfg.color, timed: cfg.timed, questions: wrong.slice(), regen: cfg.regen, backTo: cfg.backTo }); window.scrollTo({ top: 0 }); });
       var ns = document.getElementById("new-set");
-      if (ns) ns.addEventListener("click", function () { runSet({ id: cfg.id, label: cfg.label, color: cfg.color, timed: cfg.timed, questions: cfg.regen(), regen: cfg.regen }); window.scrollTo({ top: 0 }); });
-      document.getElementById("to-menu").addEventListener("click", function () { renderMenu(); window.scrollTo({ top: 0 }); });
+      if (ns) ns.addEventListener("click", function () { runSet({ id: cfg.id, label: cfg.label, color: cfg.color, timed: cfg.timed, questions: cfg.regen(), regen: cfg.regen, backTo: cfg.backTo }); window.scrollTo({ top: 0 }); });
+      document.getElementById("to-menu").addEventListener("click", function () { if (cfg.backTo) cfg.backTo(); else renderMenu(); window.scrollTo({ top: 0 }); });
     });
   }
 
