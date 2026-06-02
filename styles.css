@@ -161,6 +161,7 @@ body {
 .hd-ok { color: #15803d; }
 .hd-no { color: #b91c1c; }
 .hist-empty { color: var(--muted); margin: 6px 0; }
+.hist-row { margin-top: 12px; }
 
 /* ---------- Knowledge-gap pie chart ---------- */
 .pie-title { font-family: "Fredoka", sans-serif; font-size: 1.15rem; text-align: center; margin: 22px 0 14px; }

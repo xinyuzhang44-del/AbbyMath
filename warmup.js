@@ -398,8 +398,8 @@
         (cfg.timed ? '<span class="stopwatch" id="stopwatch">⏱ 0s</span>' : "") + "</div>" +
       '<form id="run-form">' + cardsHtml + "</form>" +
       '<div class="quiz-actions"><p class="progress" id="run-progress">0 of ' + cfg.questions.length + ' answered</p>' +
-        '<button type="button" class="cta-btn" id="check-btn">Check my answers</button> ' +
-        '<button type="button" class="nav-btn" id="hist-btn">📊 Check my quiz history</button></div>' +
+        '<button type="button" class="cta-btn" id="check-btn">Check my answers</button>' +
+        '<div class="hist-row"><button type="button" class="nav-btn" id="hist-btn">📊 Check my answer history</button></div></div>' +
       '<section id="run-history" class="history" hidden aria-live="polite"></section>' +
       '<section id="run-results" class="results" hidden aria-live="polite"></section>';
 
@@ -416,10 +416,10 @@
     histBtn.addEventListener("click", function () {
       if (histPanel.hidden) {
         refreshHist(); histPanel.hidden = false;
-        histBtn.textContent = "Hide quiz history";
+        histBtn.textContent = "Hide answer history";
         histPanel.scrollIntoView({ behavior: "smooth", block: "start" });
       } else {
-        histPanel.hidden = true; histBtn.textContent = "📊 Check my quiz history";
+        histPanel.hidden = true; histBtn.textContent = "📊 Check my answer history";
       }
     });
 
