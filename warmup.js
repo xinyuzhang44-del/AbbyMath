@@ -298,19 +298,12 @@
     root.querySelectorAll(".task-btn").forEach(function (btn) {
       btn.addEventListener("click", function () { startTask(btn.dataset.topic, parseInt(btn.dataset.task, 10)); });
     });
-    var wc = document.getElementById("wclear");
-    if (wc) wc.addEventListener("click", function () {
-      if (window.confirm("Delete all Warm-Up answer history on this device? (Your best scores stay.)")) {
-        var d = load(); d.log = []; save(d); renderMenu();
-      }
-    });
+    wireClear(root, function () { renderMenu(); });
   }
 
   // Per-attempt answer history (date/time, score, and every answer given)
-  function renderHistory() {
-    var log = (load().log || []);
-    if (!log.length) return "";
-    var rows = log.slice().reverse().map(function (e) {
+  function historyRows(log) {
+    return log.slice().reverse().map(function (e) {
       var items = (e.items || []).map(function (it, i) {
         return '<li class="' + (it.ok ? "hd-ok" : "hd-no") + '"><strong>' + (i + 1) + ".</strong> " +
           escapeHtml(it.prompt) + " — " + (it.ok ? "✓" : "✗") + " you: “" + escapeHtml(it.your || "—") + "”" +
@@ -322,8 +315,25 @@
         '<span class="hist-date">' + fmtDate(e.date) + "</span></summary>" +
         (items ? '<ul class="hist-detail">' + items + "</ul>" : "") + "</details>";
     }).join("");
-    return '<section class="history"><div class="history-head"><h2>📊 Warm-Up history (' + log.length + ")</h2>" +
-      '<button type="button" class="link-btn" id="wclear">Clear history</button></div>' + rows + "</section>";
+  }
+  function historyHtml(filterId, heading) {
+    var log = (load().log || []);
+    if (filterId) log = log.filter(function (e) { return e.id === filterId; });
+    if (!log.length) return '<p class="hist-empty">No attempts saved yet — finish this task and press “Check my answers” to record your first score. 📅</p>';
+    return '<div class="history-head"><h2>📊 ' + (heading || "Quiz history") + " (" + log.length + ")</h2>" +
+      '<button type="button" class="link-btn" id="wclear">Clear history</button></div>' + historyRows(log);
+  }
+  function renderHistory() {
+    if (!(load().log || []).length) return "";
+    return '<section class="history">' + historyHtml(null, "Warm-Up history") + "</section>";
+  }
+  function wireClear(container, after) {
+    var c = container.querySelector("#wclear");
+    if (c) c.addEventListener("click", function () {
+      if (window.confirm("Delete all Warm-Up answer history on this device? (Your best scores stay.)")) {
+        var d = load(); d.log = []; save(d); after();
+      }
+    });
   }
 
   function buildQuestions(gen, n) {
@@ -388,7 +398,9 @@
         (cfg.timed ? '<span class="stopwatch" id="stopwatch">⏱ 0s</span>' : "") + "</div>" +
       '<form id="run-form">' + cardsHtml + "</form>" +
       '<div class="quiz-actions"><p class="progress" id="run-progress">0 of ' + cfg.questions.length + ' answered</p>' +
-        '<button type="button" class="cta-btn" id="check-btn">Check my answers</button></div>' +
+        '<button type="button" class="cta-btn" id="check-btn">Check my answers</button> ' +
+        '<button type="button" class="nav-btn" id="hist-btn">📊 Check my quiz history</button></div>' +
+      '<section id="run-history" class="history" hidden aria-live="polite"></section>' +
       '<section id="run-results" class="results" hidden aria-live="polite"></section>';
 
     var form = document.getElementById("run-form");
@@ -397,6 +409,19 @@
     var N = cfg.questions.length;
 
     document.getElementById("back-btn").addEventListener("click", function () { renderMenu(); window.scrollTo({ top: 0 }); });
+
+    var histBtn = document.getElementById("hist-btn");
+    var histPanel = document.getElementById("run-history");
+    function refreshHist() { histPanel.innerHTML = historyHtml(cfg.id, "Quiz history — this task"); wireClear(histPanel, refreshHist); }
+    histBtn.addEventListener("click", function () {
+      if (histPanel.hidden) {
+        refreshHist(); histPanel.hidden = false;
+        histBtn.textContent = "Hide quiz history";
+        histPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+      } else {
+        histPanel.hidden = true; histBtn.textContent = "📊 Check my quiz history";
+      }
+    });
 
     var swTimer = null;
     if (cfg.timed) {
