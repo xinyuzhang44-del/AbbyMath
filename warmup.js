@@ -178,13 +178,66 @@
     return { prompt: qty + " notebooks cost $" + fmtMoney(each) + " each. What is the total cost?", answer: "$" + fmtMoney(each * qty), type: "money", placeholder: "$0.00" };
   }
 
+  // ---------- 6/7/8/9 fact-family engine (full coverage, balanced rotation) ----------
+  // Base pool = every fact where one factor is 6, 7, 8, or 9, paired with 2..12.
+  // A rotating shuffled queue guarantees the whole pool is seen before any repeat,
+  // so the student gets balanced exposure to all 6/7/8/9 families over time.
+  var FACTS = (function () {
+    var base = []; // unique unordered pairs (a<=b), each with at least one factor in {6,7,8,9}
+    for (var a = 2; a <= 12; a++) for (var b = a; b <= 12; b++) if ((a >= 6 && a <= 9) || (b >= 6 && b <= 9)) base.push([a, b]);
+    var queue = [], lastSig = "";
+    function shuffle(arr) { for (var i = arr.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = arr[i]; arr[i] = arr[j]; arr[j] = t; } return arr; }
+    function nextFact() { if (!queue.length) queue = shuffle(base.slice()); return queue.pop(); }
+    function toQ(f) {
+      var a = f[0], b = f[1], p = a * b;
+      if (Math.random() < 0.5) { // division (mix mult & division together)
+        if (Math.random() < 0.5) return { prompt: p + " ÷ " + a + " = ?", answer: String(b), type: "int", placeholder: "number" };
+        return { prompt: p + " ÷ " + b + " = ?", answer: String(a), type: "int", placeholder: "number" };
+      } // multiplication, randomized factor order
+      if (Math.random() < 0.5) return { prompt: a + " × " + b + " = ?", answer: String(p), type: "int", placeholder: "number" };
+      return { prompt: b + " × " + a + " = ?", answer: String(p), type: "int", placeholder: "number" };
+    }
+    function makeSet(n, depth) {
+      n = n || 10;
+      var facts = [], used = {}, guard = 0;
+      while (facts.length < n && guard < n * 8) {
+        guard++;
+        var f = nextFact(), key = f[0] + "x" + f[1];
+        if (used[key]) continue;
+        used[key] = 1; facts.push(f);
+      }
+      // make sure each of 6, 7, 8, 9 appears at least once in every set
+      [6, 7, 8, 9].forEach(function (fam) {
+        if (!facts.some(function (f) { return f[0] === fam || f[1] === fam; })) {
+          var cand = base.filter(function (f) { return f[0] === fam && !used[f[0] + "x" + f[1]]; });
+          if (cand.length) {
+            var c = cand[Math.floor(Math.random() * cand.length)], idx = Math.floor(Math.random() * facts.length);
+            used[facts[idx][0] + "x" + facts[idx][1]] = 0; facts[idx] = c; used[c[0] + "x" + c[1]] = 1;
+          }
+        }
+      });
+      shuffle(facts);
+      var qs = [], seenP = {};
+      facts.forEach(function (f) {
+        var q, tries = 0;
+        do { q = toQ(f); tries++; } while (seenP[q.prompt] && tries < 6);
+        seenP[q.prompt] = 1; qs.push(q);
+      });
+      var sig = qs.map(function (q) { return q.prompt; }).join("|");
+      if (sig === lastSig && (depth || 0) < 5) return makeSet(n, (depth || 0) + 1); // never repeat the same set back-to-back
+      lastSig = sig;
+      return qs;
+    }
+    return { makeSet: makeSet };
+  })();
+
   // ---------- topics ----------
   var TOPICS = [
     { key: "facts", name: "Multiplication & Division Facts", zh: "乘除法事实 (6, 7, 8, 9)", color: "#db2777", icon: "✖️",
       tasks: [
-        { name: "Task 1 · Basic fluency", gen: gFactsBasic },
-        { name: "Task 2 · Mixed operations", gen: gFactsMixed },
-        { name: "Task 3 · Timed challenge", gen: gFactsTimed, timed: true },
+        { name: "Task 1 · Basic fluency", gen: gFactsBasic, makeSet: function (n) { return FACTS.makeSet(n); } },
+        { name: "Task 2 · Mixed operations", gen: gFactsMixed, makeSet: function (n) { return FACTS.makeSet(n); } },
+        { name: "Task 3 · Timed challenge", gen: gFactsTimed, timed: true, makeSet: function (n) { return FACTS.makeSet(n); } },
       ] },
     { key: "regroup", name: "Addition & Subtraction with Regrouping", zh: "进位 / 退位加减法", color: "#2563eb", icon: "➕",
       tasks: [
@@ -349,14 +402,14 @@
 
   function startTask(topicKey, taskIdx) {
     var topic = TOPIC_BY_KEY[topicKey], task = topic.tasks[taskIdx];
-    var qs = buildQuestions(task.gen, 10);
+    var build = task.makeSet ? function () { return task.makeSet(10); } : function () { return buildQuestions(task.gen, 10); };
     runSet({
       id: topicKey + ":" + taskIdx,
       label: topic.name + " — " + task.name,
       color: topic.color,
       timed: !!task.timed,
-      questions: qs,
-      regen: function () { return buildQuestions(task.gen, 10); },
+      questions: build(),
+      regen: build,
     });
   }
 
