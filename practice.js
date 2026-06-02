@@ -1,4 +1,4 @@
-// AbbyMath — Grade 5 targeted practice. practice.html?topic=KEY renders 10 questions.
+// JH Math — Grade 5 targeted practice. practice.html?topic=KEY renders 10 questions.
 // No topic (or invalid) -> shows a topic menu. All questions align to the Ontario Grade 5 curriculum.
 (function () {
   "use strict";

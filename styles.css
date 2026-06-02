@@ -47,7 +47,8 @@ body {
   border-bottom: 1px solid var(--line);
   box-shadow: 0 2px 12px rgba(31, 36, 51, 0.06);
 }
-.topnav-inner { max-width: 880px; margin: 0 auto; display: flex; gap: 10px; padding: 12px 20px; }
+.topnav-inner { max-width: 880px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 10px; padding: 12px 20px; }
+.topnav-inner .nav-btn { min-width: 120px; }
 .nav-btn {
   flex: 1; text-align: center; text-decoration: none;
   font-family: "Fredoka", sans-serif; font-size: 1.02rem; font-weight: 600;
@@ -187,6 +188,68 @@ body {
 @media (max-width: 560px) {
   .legend-go { display: none; }
 }
+
+/* ====================== Warm-Up & Review ====================== */
+.hero-warm {
+  background: radial-gradient(1000px 420px at 80% -10%, #fbbf24 0%, transparent 60%),
+              linear-gradient(135deg, #f97316 0%, #16a34a 120%);
+  background-size: 100% 100%, 200% 200%;
+}
+.wintro { color: var(--muted); background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px 20px; box-shadow: var(--shadow); margin-bottom: 22px; }
+
+/* recurring weak-area banner */
+.weak-banner { background: #fff7ed; border: 1px solid #fed7aa; color: #9a3412; border-radius: 14px; padding: 14px 18px; margin-bottom: 18px; font-size: 0.98rem; }
+
+/* daily warm-up card */
+.daily-card { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  background: linear-gradient(135deg, #f59e0b, #f97316); color: #fff; border-radius: 18px; padding: 22px 26px; margin-bottom: 22px; box-shadow: 0 12px 30px rgba(245, 158, 11, 0.3); }
+.daily-card h2 { font-family: "Fredoka", sans-serif; margin: 0 0 4px; font-size: 1.35rem; }
+.daily-card p { margin: 0; opacity: 0.96; max-width: 460px; }
+.daily-card .cta-btn { color: #c2410c; }
+
+/* topic blocks */
+.wtopic { background: var(--card); border: 1px solid var(--line); border-left: 6px solid var(--tc, #999); border-radius: 16px; padding: 20px 24px; margin-bottom: 20px; box-shadow: var(--shadow); }
+.wtopic-weak { box-shadow: 0 0 0 2px #fdba74, var(--shadow); }
+.wtopic-head { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+.wtopic-icon { font-size: 1.8rem; }
+.wtopic-head h2 { font-family: "Fredoka", sans-serif; font-size: 1.25rem; margin: 0; }
+.wtopic-zh { margin: 2px 0 0; color: var(--muted); font-size: 0.9rem; }
+.focus-badge { background: #ea580c; color: #fff; font-size: 0.7rem; padding: 2px 8px; border-radius: 999px; vertical-align: middle; }
+.task-list { display: grid; gap: 10px; }
+.task-btn { display: flex; align-items: center; justify-content: space-between; gap: 12px; text-align: left;
+  background: #f7f9ff; border: 1.5px solid var(--line); border-radius: 12px; padding: 13px 16px; cursor: pointer;
+  font-family: "Nunito", sans-serif; font-size: 1rem; color: var(--ink); transition: transform 0.12s ease, border-color 0.15s ease, background 0.15s ease; }
+.task-btn:hover { transform: translateX(3px); border-color: var(--tc, #aaa); background: #eef2ff; }
+.task-name { font-weight: 700; }
+.timed-tag { font-weight: 400; }
+.task-status { font-size: 0.82rem; color: var(--muted); font-weight: 700; white-space: nowrap; }
+.task-status.done { color: #16a34a; }
+
+/* run view */
+.run-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+.back-btn { background: none; border: none; color: var(--b); font-weight: 700; cursor: pointer; font-size: 0.95rem; padding: 4px 0; }
+.run-title { font-family: "Fredoka", sans-serif; font-size: 1.25rem; margin: 0; flex: 1; }
+.stopwatch { background: #fff7ed; color: #9a3412; border-radius: 999px; padding: 5px 14px; font-weight: 700; }
+
+.wq { background: var(--card); border: 1px solid var(--line); border-left: 5px solid var(--tc, #999); border-radius: 12px; padding: 16px 18px; margin-bottom: 12px; box-shadow: var(--shadow); }
+.wq-prompt { font-size: 1.1rem; font-weight: 600; margin-bottom: 10px; }
+.wq-num { color: var(--muted); font-family: "Fredoka", sans-serif; }
+.wq-answer { display: flex; align-items: center; gap: 10px; }
+.wq-input { font-size: 1.05rem; padding: 9px 12px; border: 1.5px solid var(--line); border-radius: 9px; width: 160px; font-family: "Nunito", sans-serif; }
+.wq-input:focus { outline: none; border-color: var(--tc, #3b5bff); box-shadow: 0 0 0 3px rgba(59, 91, 255, 0.12); }
+.wq-mark { font-weight: 800; font-size: 1.2rem; }
+.wq-correct { border-left-color: #16a34a; }
+.wq-correct .wq-mark { color: #16a34a; animation: pop 0.3s ease; }
+.wq-wrong { border-left-color: #dc2626; }
+.wq-wrong .wq-mark { color: #dc2626; }
+.wq-wrong .wq-input { background: #fef2f2; }
+.wq-fix { margin-top: 10px; background: #f0fdf4; border-left: 3px solid #16a34a; border-radius: 8px; padding: 8px 12px; font-size: 0.94rem; animation: answerIn 0.3s ease; }
+.wq-hint { color: var(--muted); }
+@keyframes pop { 0% { transform: scale(0.4); } 60% { transform: scale(1.25); } 100% { transform: scale(1); } }
+
+.encourage { text-align: center; font-size: 1.05rem; font-weight: 700; margin: 4px 0 8px; color: var(--ink); }
+.encourage.celebrate { animation: celebrate 0.6s ease; }
+@keyframes celebrate { 0% { transform: scale(0.8); opacity: 0; } 50% { transform: scale(1.08); } 100% { transform: scale(1); opacity: 1; } }
 
 .quiz-actions { text-align: center; margin: 6px 0 10px; }
 .progress { color: var(--muted); font-weight: 700; margin: 0 0 12px; }

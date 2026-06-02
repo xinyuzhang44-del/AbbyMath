@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>JH Math — Grade 5 Targeted Practice</title>
-  <meta name="description" content="Targeted Grade 5 practice sets (10 questions per topic), aligned to the Ontario Mathematics curriculum." />
+  <title>JH Math — Grade 5 Warm-Up &amp; Review</title>
+  <meta name="description" content="Daily Grade 5 warm-up drills for foundational skills: multiplication/division facts, regrouping, mental math, time, and money. Aligned to the Ontario curriculum." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
-  <header class="hero hero-sm">
+<body class="warmup-page">
+  <header class="hero hero-sm hero-warm">
     <div class="hero-inner">
-      <div class="logo">🧮 <span>Abby<strong>Math</strong></span></div>
-      <h1 id="practice-title">Targeted Practice</h1>
-      <p class="tagline" id="practice-sub">10 questions · aligned to the Ontario Grade 5 curriculum.</p>
+      <div class="logo">🧮 <span>JH <strong>Math</strong></span></div>
+      <h1>Warm-Up &amp; Review</h1>
+      <p class="tagline">Quick daily practice to strengthen foundational skills before each session.</p>
     </div>
   </header>
 
@@ -23,22 +23,21 @@
     <div class="topnav-inner">
       <a class="nav-btn" href="index.html">📚 Curriculum</a>
       <a class="nav-btn" href="diagnostic.html">📝 Diagnostic</a>
-      <a class="nav-btn active" href="practice.html" aria-current="page">🎯 Practice</a>
-      <a class="nav-btn" href="warmup.html">🔥 Warm-Up</a>
+      <a class="nav-btn" href="practice.html">🎯 Practice</a>
+      <a class="nav-btn active" href="warmup.html" aria-current="page">🔥 Warm-Up</a>
     </div>
   </nav>
 
   <main class="container">
-    <div id="practice-root"></div>
+    <div id="warmup-root"></div>
   </main>
 
   <footer class="site-footer">
-    <p><strong>JH Math</strong> · Practice aligned to
+    <p><strong>JH Math</strong> · Warm-Up drills aligned to
       <a href="https://www.dcp.edu.gov.on.ca/en/curriculum/elementary-mathematics" target="_blank" rel="noopener">The Ontario Curriculum, Grades 1–8: Mathematics (2020)</a>.</p>
-    <p class="fineprint">Practice for review and planning — not an official assessment.</p>
+    <p class="fineprint">Questions are generated fresh each time. Progress is saved on this device for review and planning.</p>
   </footer>
 
-  <script defer src="topics.js"></script>
-  <script defer src="practice.js"></script>
+  <script defer src="warmup.js"></script>
 </body>
 </html>

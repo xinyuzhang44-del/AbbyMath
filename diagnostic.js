@@ -1,4 +1,4 @@
-// AbbyMath — Grade 5 diagnostic test.
+// JH Math — Grade 5 diagnostic test.
 // Grades the quiz, shows an explained answer key, saves answer history,
 // and renders a clickable "knowledge gaps" pie chart linking to topic practice.
 (function () {

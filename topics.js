@@ -1,4 +1,4 @@
-// AbbyMath — shared topic taxonomy (Grade 5). Loaded by diagnostic.html + practice.html.
+// JH Math — shared topic taxonomy (Grade 5). Loaded by diagnostic.html + practice.html.
 // Each topic maps to Ontario Grade 5 strands/expectations and gets a distinct colour.
 window.ABBY_TOPIC_ORDER = [
   "number-sense", "fractions", "decimals", "operations", "algebra",

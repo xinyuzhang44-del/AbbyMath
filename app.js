@@ -1,4 +1,4 @@
-// AbbyMath — scroll-reveal animations (progressive enhancement).
+// JH Math — scroll-reveal animations (progressive enhancement).
 // If JS is off or reduced-motion is set, content shows normally.
 (function () {
   "use strict";
