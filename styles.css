@@ -227,3 +227,96 @@ body {
   .strand, .intro { padding: 20px; }
   .strand-head h2 { font-size: 1.35rem; }
 }
+
+/* ====================== Animations ====================== */
+
+/* Animated hero gradient */
+.hero {
+  background-size: 100% 100%, 200% 200%;
+  animation: heroPan 18s ease infinite alternate;
+}
+@keyframes heroPan {
+  from { background-position: 80% -10%, 0% 50%; }
+  to   { background-position: 80% -10%, 100% 50%; }
+}
+
+/* Hero entrance (staggered) */
+.logo, .hero h1, .tagline, .subtag, .strand-nav {
+  opacity: 0;
+  animation: fadeUp 0.7s ease forwards;
+}
+.logo       { animation-delay: 0.05s; }
+.hero h1    { animation-delay: 0.18s; }
+.tagline    { animation-delay: 0.32s; }
+.subtag     { animation-delay: 0.44s; }
+.strand-nav { animation-delay: 0.56s; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Floating logo: fade in, then gently float forever */
+.logo {
+  display: inline-block;
+  animation: fadeUp 0.7s ease 0.05s forwards, float 4.5s ease-in-out 1.2s infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+
+/* Scroll-reveal for cards (class added by app.js) */
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.in-view {
+  opacity: 1;
+  transform: none;
+}
+
+/* Card hover lift */
+.strand {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.strand:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 32px rgba(31, 36, 51, 0.12);
+}
+
+/* Badge pop on hover */
+.badge { transition: transform 0.2s ease; }
+.strand:hover .badge { transform: scale(1.08) rotate(-4deg); }
+
+/* Nav pill bounce on hover (already has translateY; add scale) */
+.strand-nav a:active { transform: translateY(0) scale(0.96); }
+
+/* Answer reveal when <details> opens */
+.q-list details[open] p {
+  animation: answerIn 0.3s ease;
+}
+@keyframes answerIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.q-list summary { transition: color 0.15s ease; }
+.q-list summary:hover { color: var(--c); }
+
+/* Assignment-bar links micro-interaction */
+.assignment-links a { transition: background 0.15s ease, transform 0.15s ease; }
+.assignment-links a:hover { transform: translateY(-2px); }
+
+/* Respect reduced-motion: turn everything off */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  .logo, .hero h1, .tagline, .subtag, .strand-nav, .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
