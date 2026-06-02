@@ -22,6 +22,7 @@
     return parseInt(m[1], 10) * 60 + parseInt(m[2], 10);
   }
   function clock(h, m) { return h + ":" + pad(m); }
+  function fmtDate(iso) { try { return new Date(iso).toLocaleString(); } catch (e) { return iso; } }
   function addMin(sh, sm, add) {
     var total = sm + add, em = total % 60, addH = Math.floor(total / 60);
     var eh = ((sh - 1 + addH) % 12) + 1;
@@ -225,12 +226,12 @@
   // ---------- storage ----------
   function load() { try { return JSON.parse(localStorage.getItem(STORE_KEY)) || { tasks: {}, log: [] }; } catch (e) { return { tasks: {}, log: [] }; } }
   function save(d) { try { localStorage.setItem(STORE_KEY, JSON.stringify(d)); } catch (e) {} }
-  function recordResult(id, label, score, total) {
+  function recordResult(id, label, score, total, items) {
     var d = load(), pct = Math.round((score / total) * 100);
     var prev = d.tasks[id] || { bestPct: 0, attempts: 0 };
     d.tasks[id] = { bestPct: Math.max(prev.bestPct, pct), lastPct: pct, attempts: prev.attempts + 1, completed: Math.max(prev.bestPct, pct) >= 80 };
-    d.log.push({ date: new Date().toISOString(), id: id, label: label, pct: pct, score: score, total: total });
-    if (d.log.length > 200) d.log = d.log.slice(d.log.length - 200);
+    d.log.push({ date: new Date().toISOString(), id: id, label: label, pct: pct, score: score, total: total, items: items || [] });
+    if (d.log.length > 80) d.log = d.log.slice(d.log.length - 80);
     save(d);
   }
   function weakestTopic() {
@@ -290,13 +291,39 @@
 
     root.innerHTML = weakBanner + dailyCard +
       '<p class="wintro">Pick a topic and a task. Each task has <strong>10 questions</strong> that get a little harder. ' +
-      "Your best score is saved on this device, and you can retry the ones you miss. 💪</p>" + cards;
+      "Your best score is saved on this device, and you can retry the ones you miss. 💪</p>" + cards + renderHistory();
 
     var db = document.getElementById("daily-btn");
     if (db) db.addEventListener("click", startDaily);
     root.querySelectorAll(".task-btn").forEach(function (btn) {
       btn.addEventListener("click", function () { startTask(btn.dataset.topic, parseInt(btn.dataset.task, 10)); });
     });
+    var wc = document.getElementById("wclear");
+    if (wc) wc.addEventListener("click", function () {
+      if (window.confirm("Delete all Warm-Up answer history on this device? (Your best scores stay.)")) {
+        var d = load(); d.log = []; save(d); renderMenu();
+      }
+    });
+  }
+
+  // Per-attempt answer history (date/time, score, and every answer given)
+  function renderHistory() {
+    var log = (load().log || []);
+    if (!log.length) return "";
+    var rows = log.slice().reverse().map(function (e) {
+      var items = (e.items || []).map(function (it, i) {
+        return '<li class="' + (it.ok ? "hd-ok" : "hd-no") + '"><strong>' + (i + 1) + ".</strong> " +
+          escapeHtml(it.prompt) + " — " + (it.ok ? "✓" : "✗") + " you: “" + escapeHtml(it.your || "—") + "”" +
+          (it.ok ? "" : " · answer: “" + escapeHtml(it.answer) + "”") + "</li>";
+      }).join("");
+      return '<details class="hist-item"><summary>' +
+        '<span class="hist-num">' + escapeHtml(e.label) + "</span>" +
+        '<span class="hist-score">' + e.score + "/" + e.total + " · " + e.pct + "%</span>" +
+        '<span class="hist-date">' + fmtDate(e.date) + "</span></summary>" +
+        (items ? '<ul class="hist-detail">' + items + "</ul>" : "") + "</details>";
+    }).join("");
+    return '<section class="history"><div class="history-head"><h2>📊 Warm-Up history (' + log.length + ")</h2>" +
+      '<button type="button" class="link-btn" id="wclear">Clear history</button></div>' + rows + "</section>";
   }
 
   function buildQuestions(gen, n) {
@@ -393,10 +420,11 @@
       progress.classList.remove("progress-warn");
       if (swTimer) { clearInterval(swTimer); swTimer = null; }
 
-      var score = 0, wrong = [];
+      var score = 0, wrong = [], items = [];
       cfg.questions.forEach(function (q, i) {
         var card = form.children[i], inp = card.querySelector(".wq-input"), mark = card.querySelector(".wq-mark"), fix = card.querySelector(".wq-fix");
         var ok = grade(q.type, inp.value, q.answer);
+        items.push({ prompt: q.prompt, your: inp.value.trim(), answer: q.answer, ok: ok });
         inp.disabled = true;
         card.classList.remove("wq-correct", "wq-wrong");
         card.classList.add(ok ? "wq-correct" : "wq-wrong");
@@ -411,7 +439,7 @@
 
       var pct = Math.round((score / N) * 100);
       var secs = Math.round((Date.now() - startTime) / 1000);
-      recordResult(cfg.id, cfg.label, score, N);
+      recordResult(cfg.id, cfg.label, score, N, items);
 
       var msg = pct === 100 ? "Perfect! 🌟 You nailed every one!"
         : pct >= 80 ? "Great job! 🎉 You're getting strong at this."
